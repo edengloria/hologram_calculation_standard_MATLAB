@@ -10,4 +10,3 @@ https://drive.google.com/drive/folders/15flDXkF6RPN0If-YvKcEHU33vJi1bHyj?usp=sha
 
 Propagation_type : ASM,FAM,ARSS,DSF is available
 
-This MATLAB code was first created at OEQELAB, Professor Byoungho Lee, SNU, and versioned at Prof. Seung-Yeol Lee's IPOD Lab, KNU.
