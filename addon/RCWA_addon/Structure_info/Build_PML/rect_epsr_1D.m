@@ -1,0 +1,14 @@
+function Epsr2=rect_epsr_1D(n_rd,n_gr,gambda,M,f,x0);
+h=[-2*M:1:-1 0.5 1:1:2*M]';
+Nx=length(h);
+x_s=-0.5*gambda;
+x_e=0.5*gambda;
+dx=gambda/(Nx-1);
+Fx=1/dx;
+dfx=Fx/(Nx-1);
+fx=(-Fx/2:dfx:Fx/2);
+shift_factor=exp(-j*2*pi*fx*x0).';
+Epsr2=(n_rd^2-n_gr^2).*sin(pi*h*f)./(pi*h);
+Epsr2(2*M+1)=n_rd^2*f+n_gr^2*(1-f);
+Epsr2=Epsr2.*shift_factor;
+Epsr2=Epsr2.';

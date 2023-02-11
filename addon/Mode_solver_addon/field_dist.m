@@ -1,0 +1,51 @@
+function [Hy Ex Ez By Dx Dz Pz ind] = field_dist(ep,mu,gamma,d,k0,beta,kx,x_set,coeff)
+
+N           = length(ep);
+
+c0          = 3e8;
+eps0        = 1e9/(36*pi);
+
+l           = zeros(1,N);
+m           = zeros(1,N);
+
+for q=2:N
+    l(q)    = l(q-1) + d(q);
+    m(q)    = l(q-1) + d(q)/2;
+end
+
+
+m(1)        = l(1);
+m(N)        = l(N-1);
+
+
+n           = 1;
+x_len       = length(x_set);
+
+Hy          = zeros(1,x_len);
+Ex          = zeros(1,x_len);
+Ez          = zeros(1,x_len);
+By          = zeros(1,x_len);
+Dx          = zeros(1,x_len);
+Dz          = zeros(1,x_len);
+Pz          = zeros(1,x_len);
+ind         = zeros(1,x_len);
+
+for x_idx=1:x_len
+    x       = x_set(x_idx);
+    while l(n) < x && n ~= N
+        n = n+1;
+    end
+    
+    ca              = coeff(2*n-1);
+    cb              = coeff(2*n  );
+    
+    Hy(x_idx)       =                          ca * exp(-k0*kx(n)*(x-m(n))) +                         cb * exp(+k0*kx(n)*(x-m(n)));
+    Ez(x_idx)       = -j*kx(n)*c0/eps0/gamma(n) * ca * exp(-k0*kx(n)*(x-m(n))) + j*kx(n)*c0/eps0/gamma(n) * cb * exp(+k0*kx(n)*(x-m(n)));
+    Ex(x_idx)       = beta*c0/eps0/gamma(n)*Hy(x_idx);
+
+    By(x_idx)       = mu(n) * Hy(x_idx);
+    Dz(x_idx)       = ep(n) * Ez(x_idx);
+    Dx(x_idx)       = ep(n) * Ex(x_idx);
+    Pz(x_idx)       = Ex(x_idx) * conj(Hy(x_idx));
+    ind(x_idx)      = abs(sqrt(ep(n)*mu(n)));
+end
